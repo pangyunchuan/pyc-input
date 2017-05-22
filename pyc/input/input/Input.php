@@ -17,15 +17,16 @@ final class Input
 {
     private function __construct(){}
     private static $_obj = array();
-    protected static $data = array();//数据池(todo 不是单例后用静态)
+    protected static $data = array();//数据池
     protected static $error = array();//错误信息
     protected $sorce = array();//数据源,,$_request,$_get,$_post,,任意数组,,cookie,session也行
-    protected $opList = array();//要操作的字段列表,验证或过滤
+    protected $toOpList = array();//要操作的字段列表,验证或过滤
 
     //todo data 内部参数验证,,未实现
 //    protected $is_inner = false;//内部参数,,数据池的 深层
 
     /**
+     * 获取对象
      * @return $this
      */
     final public static function obj(){
@@ -81,14 +82,14 @@ final class Input
      * @return $this
      */
     public function setOpField($field = null){
-        $verifyField = array();
+        $toOpList = array();
         if(is_null($field)){
-            $verifyField = array_keys(self::$data);
+            $toOpList = array_keys(self::$data);
         }elseif(is_string($field)){
-            $verifyField =  explode(',',$field);
+            $toOpList =  explode(',',$field);
         }
 
-        $this->opList = $verifyField;
+        $this->toOpList = $toOpList;
         return $this;
     }
 
@@ -98,24 +99,24 @@ final class Input
      * @return $this
      */
     public function filter(FilterBase $filter){
-        foreach ($this->opList as $field) {
+        foreach ($this->toOpList as $field) {
             self::$data[$field] = $filter->filter(self::$data[$field]);
         }
         return $this;
     }
 
     /**
-     * 函数过滤
+     * 函数过滤,建议扩展为过滤器
      * @param $fun  过滤函数名 val作为第一个参数
      * @param array $param 其他可选参数
      * @return $this
      */
     public function filterCall($fun,$param = array()){
-        foreach ($this->opList as $field) {
+        foreach ($this->toOpList as $field) {
             $val = self::$data[$field];
             $tempParam = $param;
             array_unshift($tempParam,$val);
-            $val = call_user_func_array($fun,$tempParam);
+            $val = call_useor_func_array($fun,$tempParam);
             self::$data[$field] = $val;
         }
         return $this;
@@ -129,7 +130,7 @@ final class Input
      * @return $this
      */
     public function verify(VerifyBase $verify,  $msg='格式不正确'){
-        foreach ($this->opList as $field) {
+        foreach ($this->toOpList as $field) {
             if(!$verify->verify(self::$data[$field])){
                 self::$error[$field][] = $msg;
             }
@@ -138,14 +139,14 @@ final class Input
     }
 
     /**
-     * 函数验证
+     * 函数验证 建议扩展为验证器
      * @param $fun 验证函数名 val作为第一个参数
      * @param $param  可选其他参数
      * @param string $msg
      * @return $this
      */
     public function verifyCall($fun,$param,$msg = '不正确'){
-        foreach ($this->opList as $field) {
+        foreach ($this->toOpList as $field) {
             $val = self::$data[$field];
             $tempParam = $param;
             array_unshift($tempParam,$val);
@@ -157,13 +158,13 @@ final class Input
     }
 
     /**
-     * 正则验证
+     * 正则验证 建议扩展为验证器
      * @param $regExpStr 正则表达式
      * @param $msg
      * @return $this
      */
     public function verifyRegExp($regExpStr,$msg = '不匹配'){
-        foreach ($this->opList as $field) {
+        foreach ($this->toOpList as $field) {
             if(!preg_match($regExpStr,self::$data[$field])){
                 self::$error[$field][] = $msg;
             }
@@ -175,8 +176,8 @@ final class Input
     /**
      * 比较 指定的参数
      * @param CompareBase $compare
-     * @param $op1
-     * @param $op2
+     * @param $op1 字段,没有设置,就是字符串本身
+     * @param $op2 字段,没有设置,就是字符串本身  或者 一个数组,,
      * @param string $msg
      * @return $this
      */

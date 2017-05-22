@@ -9,7 +9,7 @@
 namespace pyc\input\filter;
 
 /**
- * 数据过滤(转换)器
+ * 数据过滤(转换)器 没有合适的就自己扩展
  * Class FilterBase
  * @package pyc\input\filter
  */
