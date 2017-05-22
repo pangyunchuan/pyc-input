@@ -5,6 +5,8 @@ use pyc\input\input\Input;
 use pyc\input\verify\VerNotEmpty;
 use pyc\input\verify\VerPath;
 echo '<pre>';
+error_reporting ( E_ALL );
+ini_set('display_errors','on');
 $sorce = array(
 //            'name'=>' aabcdef ',
     'url'=>' url/1 ',
@@ -41,7 +43,7 @@ $input = Input::obj()->sorce($sorce)->recive('name')
     //用 VerPath 验证器 验证url字段,不正确,记录错误信息 msg
     ->setOpField('url')->verify(VerPath::obj(),'不是path')
     //用验证回调方法  使用 is_string 方法验证 name 是字符串, 不是记录错误信息
-    ->setOpField('name')->verifyCall('is_string','不能为空')
+    ->setOpField('name')->verifyCall('is_string','不能为空',array())
     //用正则 /^[a-z0-9_-]{6,18}$/ 验证pass3,pass,,,不正确,记录错误信息 msg
     ->setOpField('pass3,pass')->verifyRegExp('/^[a-z0-9_-]{6,18}$/','6-18位字母或数字')
 

@@ -116,7 +116,7 @@ final class Input
             $val = self::$data[$field];
             $tempParam = $param;
             array_unshift($tempParam,$val);
-            $val = call_useor_func_array($fun,$tempParam);
+            $val = call_user_func_array($fun,$tempParam);
             self::$data[$field] = $val;
         }
         return $this;
@@ -141,11 +141,11 @@ final class Input
     /**
      * 函数验证 建议扩展为验证器
      * @param $fun 验证函数名 val作为第一个参数
-     * @param $param  可选其他参数
+     * @param array $param  可选其他参数
      * @param string $msg
      * @return $this
      */
-    public function verifyCall($fun,$param,$msg = '不正确'){
+    public function verifyCall($fun,$msg = '不正确',$param = array()){
         foreach ($this->toOpList as $field) {
             $val = self::$data[$field];
             $tempParam = $param;
