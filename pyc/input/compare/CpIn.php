@@ -8,7 +8,11 @@
 
 namespace pyc\input\compare;
 
-
+/**
+ * in_array
+ * Class CpIn
+ * @package pyc\input\compare
+ */
 class CpIn extends CompareBase
 {
     public function compare($v1, $v2)

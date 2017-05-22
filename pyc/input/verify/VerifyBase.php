@@ -9,7 +9,7 @@
 namespace pyc\input\verify;
 
 /**
- * 验证数据
+ * 数据验证器
  * Class VerifyBase
  * @package pyc\input\verify
  */

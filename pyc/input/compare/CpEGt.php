@@ -8,7 +8,11 @@
 
 namespace pyc\input\compare;
 
-
+/**
+ * 大于等于
+ * Class CpEGt
+ * @package pyc\input\compare
+ */
 class CpEGt extends CompareBase
 {
     public function compare($v1, $v2)

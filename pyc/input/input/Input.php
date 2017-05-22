@@ -17,9 +17,9 @@ final class Input
 {
     private function __construct(){}
     private static $_obj = array();
-    protected $data = array();//数据池(todo 不是单例后用静态)
+    protected static $data = array();//数据池(todo 不是单例后用静态)
+    protected static $error = array();//错误信息
     protected $sorce = array();//数据源,,$_request,$_get,$_post,,任意数组,,cookie,session也行
-    protected $error = array();//错误信息
     protected $opList = array();//要操作的字段列表,验证或过滤
 
     //todo data 内部参数验证,,未实现
@@ -59,8 +59,8 @@ final class Input
      */
     public function recive($field, $default = null){
         //已经取值的参数,跳过
-        if( isset($this->data[$field])) return $this;
-        $this->data[$field] = isset($this->sorce[$field]) ? $this->sorce[$field] : $default;//没有传递,用默认值
+        if( isset(self::$data[$field])) return $this;
+        self::$data[$field] = isset($this->sorce[$field]) ? $this->sorce[$field] : $default;//没有传递,用默认值
         return $this;
     }
 
@@ -77,13 +77,13 @@ final class Input
 
     /**
      * 设置之后验证或过滤的值
-     * @param astring|null $field  null全部,string,多个用逗号隔开
+     * @param string|null $field  null全部,string,多个用逗号隔开
      * @return $this
      */
-    public function setOpField($field){
+    public function setOpField($field = null){
         $verifyField = array();
         if(is_null($field)){
-            $verifyField = array_keys($this->data);
+            $verifyField = array_keys(self::$data);
         }elseif(is_string($field)){
             $verifyField =  explode(',',$field);
         }
@@ -99,7 +99,7 @@ final class Input
      */
     public function filter(FilterBase $filter){
         foreach ($this->opList as $field) {
-            $this->data[$field] = $filter->filter($this->data[$field]);
+            self::$data[$field] = $filter->filter(self::$data[$field]);
         }
         return $this;
     }
@@ -112,11 +112,11 @@ final class Input
      */
     public function filterCall($fun,$param = array()){
         foreach ($this->opList as $field) {
-            $val = $this->data[$field];
+            $val = self::$data[$field];
             $tempParam = $param;
             array_unshift($tempParam,$val);
             $val = call_user_func_array($fun,$tempParam);
-            $this->data[$field] = $val;
+            self::$data[$field] = $val;
         }
         return $this;
     }
@@ -130,8 +130,8 @@ final class Input
      */
     public function verify(VerifyBase $verify,  $msg='格式不正确'){
         foreach ($this->opList as $field) {
-            if(!$verify->verify($this->data[$field])){
-                $this->error[$field][] = $msg;
+            if(!$verify->verify(self::$data[$field])){
+                self::$error[$field][] = $msg;
             }
         }
         return $this;
@@ -146,11 +146,11 @@ final class Input
      */
     public function verifyCall($fun,$param,$msg = '不正确'){
         foreach ($this->opList as $field) {
-            $val = $this->data[$field];
+            $val = self::$data[$field];
             $tempParam = $param;
             array_unshift($tempParam,$val);
             if(!call_user_func_array($fun,$tempParam)){
-                $this->error[$field][] = $msg;
+                self::$error[$field][] = $msg;
             }
         }
         return $this;
@@ -164,8 +164,8 @@ final class Input
      */
     public function verifyRegExp($regExpStr,$msg = '不匹配'){
         foreach ($this->opList as $field) {
-            if(!preg_match($regExpStr,$this->data[$field])){
-                $this->error[$field][] = $msg;
+            if(!preg_match($regExpStr,self::$data[$field])){
+                self::$error[$field][] = $msg;
             }
         }
         return $this;
@@ -181,12 +181,12 @@ final class Input
      * @return $this
      */
     public function compare(CompareBase $compare,$op1,$op2,$msg = '预期不符'){
-        $op1 = isset($this->data[$op1]) ? $this->data[$op1] : $op1;
+        $op1 = isset(self::$data[$op1]) ? self::$data[$op1] : $op1;
         if(!is_array($op2)){
-            $op2 = isset($this->data[$op2]) ? $this->data[$op2] : $op2;
+            $op2 = isset(self::$data[$op2]) ? self::$data[$op2] : $op2;
         }
 
-        if(!$compare->compare($op1,$op2)) $this->error['compare'][] = $msg;
+        if(!$compare->compare($op1,$op2)) self::$error['compare'][] = $msg;
         return $this;
     }
 
@@ -196,7 +196,7 @@ final class Input
      * @return array
      */
     public function get(){
-        return $this->data;
+        return self::$data;
     }
 
     /**
@@ -205,7 +205,7 @@ final class Input
      */
     public function getValues(){
         //可配合list语法使用
-        return array_values($this->data);
+        return array_values(self::$data);
     }
 
     /**
@@ -213,6 +213,6 @@ final class Input
      * @return array
      */
     public function getError(){
-        return $this->error;
+        return self::$error;
     }
 }

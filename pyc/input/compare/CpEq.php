@@ -7,7 +7,11 @@
  */
 
 namespace pyc\input\compare;
-//相等
+/**
+ * 等于
+ * Class CpEq
+ * @package pyc\input\compare
+ */
 class CpEq extends CompareBase
 {
     public function compare($v1,$v2)

@@ -8,7 +8,11 @@
 
 namespace pyc\input\compare;
 
-
+/**
+ * 不在什么中
+ * Class CpNotIn
+ * @package pyc\input\compare
+ */
 class CpNotIn extends CompareBase
 {
     public function compare($v1, $v2)

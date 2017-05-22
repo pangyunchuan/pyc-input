@@ -8,7 +8,11 @@
 
 namespace pyc\input\compare;
 
-
+/**
+ * 小于
+ * Class CpLt
+ * @package pyc\input\compare
+ */
 class CpLt extends CompareBase
 {
     public function compare($v1, $v2)

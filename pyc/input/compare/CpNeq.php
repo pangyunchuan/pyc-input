@@ -8,7 +8,11 @@
 
 namespace pyc\input\compare;
 
-
+/**
+ * 不等于
+ * Class CpNeq
+ * @package pyc\input\compare
+ */
 class CpNeq extends CompareBase
 {
     public function compare($v1, $v2)

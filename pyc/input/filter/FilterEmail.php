@@ -8,7 +8,11 @@
 
 namespace pyc\input\filter;
 
-
+/**
+ * 过滤email数据
+ * Class FilterEmail
+ * @package pyc\input\filter
+ */
 class FilterEmail extends FilterBase
 {
     public function filter($val)

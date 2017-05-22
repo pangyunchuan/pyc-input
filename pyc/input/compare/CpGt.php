@@ -8,7 +8,11 @@
 
 namespace pyc\input\compare;
 
-
+/**
+ * 大于
+ * Class CpGt
+ * @package pyc\input\compare
+ */
 class CpGt extends CompareBase
 {
     public function compare($v1, $v2)

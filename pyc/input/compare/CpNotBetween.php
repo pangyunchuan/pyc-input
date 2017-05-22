@@ -8,7 +8,11 @@
 
 namespace pyc\input\compare;
 
-
+/**
+ * 不在什么之间
+ * Class CpNotBetween
+ * @package pyc\input\compare
+ */
 class CpNotBetween extends CompareBase
 {
     public function compare($v1, $v2)

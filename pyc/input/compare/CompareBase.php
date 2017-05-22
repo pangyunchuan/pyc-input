@@ -9,7 +9,7 @@
 namespace pyc\input\compare;
 
 /**
- * 比较数据
+ * 数据比较器
  * Class CompareBase
  * @package pyc\input\compare
  */

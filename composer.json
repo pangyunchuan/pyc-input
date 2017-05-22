@@ -1,4 +1,24 @@
 {
+
+
+
+  "name": "pyc/input",
+  "type": "library",
+  "description": "input for PHP 5.6",
+  "keywords": ["input","php"],
+  "homepage": "https://github.com/pangyunchuan/pyc-input",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "pangyunchuan",
+      "email": "897448376@qq.com",
+      "homepage": "https://github.com/pangyunchuan/pyc-input",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.6.0"
+  },
   "autoload": {
     "psr-4": {
       "pyc\\input\\": "pyc/input"
